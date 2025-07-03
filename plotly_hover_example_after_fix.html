@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html style="height: 100%;">
+  <head>
+    <meta charset="utf-8" />
+    <script src="https://cdn.plot.ly/plotly-3.0.1.min.js"></script>
+  </head>
+  <body style="margin:0; height:100%; display:flex; justify-content:center; background:white;">
+    <div id="plot" style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%);"></div>
+    <script>
+      const graph1 = {
+        x: [1, 2, 3],
+        y: [1, 2, 1],
+        mode: 'markers',
+        type: 'scatter',
+        name: 'Graph 1',
+        marker: { color: 'blue' },
+        text: [
+          'A: Point 1<br>X=1, Y=1',
+          'A: Point 2<br>X=2, Y=2',
+          'A: Point 3<br>X=3, Y=1'
+        ],
+        hoverinfo: 'text',
+        visible: true
+      };
+
+      const graph2 = {
+        x: [1, 2, 3],
+        y: [3, 2, 4],
+        mode: 'markers',
+        type: 'scatter',
+        name: 'Graph 2',
+        marker: { color: 'red' },
+        text: [
+          'B: Point 1<br>X=1, Y=3',
+          'B: Point 2<br>X=2, Y=2',
+          'B: Point 3<br>X=3, Y=4'
+        ],
+        hoverinfo: 'text',
+        visible: false  // ← 初期状態で非表示
+      };
+
+      const layout = {
+        title: {
+          text: 'Graph 1',
+          x: 0.03,
+          xanchor: 'left',
+          font: { size: 18, color: 'black' }
+        },
+        updatemenus: [
+          {
+            type: 'buttons',
+            direction: 'down',
+            showactive: true,
+            x: -0.1,
+            xanchor: 'left',
+            y: 1.0,
+            yanchor: 'top',
+            buttons: [
+              {
+                label: 'Graph 1',
+                method: 'update',
+                args: [
+                  { visible: [true, false] },
+                  { title: 'Graph 1' }
+                ]
+              },
+              {
+                label: 'Graph 2',
+                method: 'update',
+                args: [
+                  { visible: [false, true] },
+                  { title: 'Graph 2' }
+                ]
+              }
+            ]
+          }
+        ]
+      };
+
+      Plotly.newPlot('plot', [graph1, graph2], layout).then(() => {
+        const plotElem = document.getElementById('plot');
+        plotElem.on('plotly_update', function () {
+          const hoverLayer = plotElem.querySelector('.hoverlayer');
+          if (hoverLayer) hoverLayer.innerHTML = '';
+        });
+      });
+    </script>
+  </body>
+</html>
+
